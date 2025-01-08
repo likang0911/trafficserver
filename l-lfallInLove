@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小动物轮播图</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+        .carousel {
+            position: relative;
+            width: 90%;
+            max-width: 300px;
+            overflow: hidden;
+        }
+        .carousel .slides {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .carousel .slides img {
+            width: 100%;
+            display: block;
+        }
+        .carousel .arrows {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+        .carousel .arrows button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        .carousel .arrows button:focus {
+            outline: none;
+        }
+        .carousel .dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+        }
+        .carousel .dots button {
+            width: 10px;
+            height: 10px;
+            background-color: #ccc;
+            border: none;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        .carousel .dots button.active {
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel">
+        <div class="slides">
+            <img src="https://via.placeholder.com/300x200?text=小猫" alt="小猫">
+            <img src="https://via.placeholder.com/300x200?text=小狗" alt="小狗">
+            <img src="https://via.placeholder.com/300x200?text=小兔子" alt="小兔子">
+            <img src="https://via.placeholder.com/300x200?text=小鸭子" alt="小鸭子">
+            <img src="https://via.placeholder.com/300x200?text=小鹦鹉" alt="小鹦鹉">
+        </div>
+        <div class="arrows">
+            <button id="prevArrow">‹</button>
+            <button id="nextArrow">›</button>
+        </div>
+        <div class="dots">
+            <button class="active"></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel .slides img');
+        const dots = document.querySelectorAll('.carousel .dots button');
+        const totalSlides = slides.length;
+        const prevArrow = document.getElementById('prevArrow');
+        const nextArrow = document.getElementById('nextArrow');
+
+        function updateCarousel() {
+            const offset = -currentSlide * 100;
+            document.querySelector('.carousel .slides').style.transform = `translateX(${offset}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        prevArrow.addEventListener('click', prevSlide);
+        nextArrow.addEventListener('click', nextSlide);
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                updateCarousel();
+            });
+        });
+
+        setInterval(nextSlide, 2000); // 每隔2秒自动切换到下一个图片
+    </script>
+</body>
+</html>
